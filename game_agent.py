@@ -19,7 +19,7 @@ def get_distance_between_players(game, player):
     opponent = game.get_opponent(player)
     loc = game.get_player_location(player)
     opponent_loc = game.get_player_location(opponent)
-    if (loc is None or opponent_loc is None):
+    if loc is None or opponent_loc is None:
         return 0.
     return abs(loc[0] - opponent_loc[0]) + abs(loc[1] - opponent_loc[1])
 
@@ -30,7 +30,7 @@ def get_distance_from_center(game, player):
     added to the number of cells along the column
     """
     loc = game.get_player_location(player)
-    if (loc is None):
+    if loc is None:
         return 0.
     dist_from_vertical_center = abs(game.height/2. - loc[0])
     dist_from_horizontal_center = abs(game.width/2. - loc[1])
@@ -80,7 +80,7 @@ def custom_score(game, player):
     board = game.height * game.width
     moves_board = game.move_count / board
     if moves_board > 0.33:
-        move_diff = (moves_own - moves_opp*2) 
+        move_diff = (moves_own - moves_opp * 2) 
     else:
         move_diff = (moves_own - moves_opp)
 
@@ -160,7 +160,7 @@ def custom_score_3(game, player):
     # features
     moves_own = len(game.get_legal_moves(player))
     moves_opp = len(game.get_legal_moves(game.get_opponent(player)))
-    return float(moves_own - moves_opp*2)
+    return float(moves_own - moves_opp * 2)
 
 class IsolationPlayer:
     """Base class for minimax and alphabeta agents -- this class is never
@@ -237,7 +237,7 @@ class MinimaxPlayer(IsolationPlayer):
             # raised when the timer is about to expire.
             best_move = self.minimax(game, self.search_depth)
         except SearchTimeout:
-            pass  # Handle any actions required after timeout as needed
+            pass
 
         # Return the best move from the last completed search iteration
         return best_move
@@ -252,10 +252,9 @@ class MinimaxPlayer(IsolationPlayer):
         return current_depth == 0 or (player_moves == 0 and opponent_moves == 0)
 
     def min_value(self, game, current_depth):
-        """ TODO: Description
-        
-        Here, this holds true: game.active_player == game._player_2
-        PLAYER 2
+        """ 
+        At this level, The following condition holds true:
+        game.active_player == game._player_2
 
         Return the value for a win (+1) if the game is over,
         otherwise return the minimum value over all legal child
@@ -278,10 +277,9 @@ class MinimaxPlayer(IsolationPlayer):
         return v
 
     def max_value(self, game, current_depth):
-        """ TODO: Description
-        
-        Here, this holds true: game.active_player == game._player_1
-        PLAYER 1
+        """ 
+        At this level, The following condition holds true:
+        game.active_player == game._player_1
 
         Return the value for a loss (-1) if the game is over,
         otherwise return the maximum value over all legal child
@@ -350,7 +348,7 @@ class MinimaxPlayer(IsolationPlayer):
         for move in game.get_legal_moves():
             next_state = game.forecast_move(move)
             decision_value = self.min_value(next_state, depth_limit - 1)
-            if (decision_value > max_value):
+            if decision_value > max_value:
                 max_value = decision_value
                 best_move = move
                 
@@ -364,7 +362,9 @@ class AlphaBetaPlayer(IsolationPlayer):
     """
         
     def cutoff_test(self, game, player, current_depth):
-        """ Return True if depth limit is reached or there are no more moves available to be played
+        """ 
+        Return True if depth limit is reached or 
+        there are no more moves available to be played
         """
         player_moves = len(game.get_legal_moves(player))
         opponent_moves = len(game.get_legal_moves(game.get_opponent(player)))
@@ -389,7 +389,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         for legal_move in game.get_legal_moves():
             next_state = game.forecast_move(legal_move)
             next_state_value, _ = self.max_value(next_state, legal_move, alpha, beta, current_depth - 1)
-            if (next_state_value < v):
+            if next_state_value < v:
                 v = next_state_value
                 worst_move = legal_move
             if v <= alpha: 
@@ -416,7 +416,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         for legal_move in game.get_legal_moves():
             next_state = game.forecast_move(legal_move)
             next_state_value, _ = self.min_value(next_state, legal_move, alpha, beta, current_depth - 1)
-            if (next_state_value > v):
+            if next_state_value > v:
                 v = next_state_value
                 best_move = legal_move
             if v >= beta: 
